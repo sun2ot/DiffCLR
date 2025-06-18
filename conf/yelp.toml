@@ -1,0 +1,43 @@
+[base]
+latdim = 64 # Embedding size
+topk = 20
+gpu = "0"
+seed = 125 # Random seed
+hidden_dim = 1024 # embedding size for denoise layer input/output 
+step_dim = 10 # time embedding size for diffusion step
+cl_method = 1
+enable_save = false
+
+
+[data]
+name = "yelp" # Dataset name
+dir = "/home/yzh/DiffCLR/datasets"  # Absolute path
+
+
+[hyper]
+modal_cl_temp = 0.5  # Temperature in cross-modal CL
+modal_cl_rate = 0.01 # Weight for cross-modal CL
+cross_cl_temp = 0.2  # Temperature in cross-layer CL
+cross_cl_rate = 0.1  # Weight for cross-layer CL
+noise_degree = 0.5   # Noise degree for cross-layer CL
+
+# Noise for diffusion
+noise_scale = 0.1
+noise_min = 0.0001
+noise_max = 0.02
+steps = 5
+
+sim_weight = 1
+residual_weight = 0.5
+modal_adj_weight = 0.2
+sampling_step = 0 # Initial sampling steps for the inverse diffusion process
+knn_topk = 10
+
+
+[train]
+lr = 0.001
+batch = 1024
+reg = 1e-5
+epoch = 50
+test_epoch = 1  # Test interval (every 1/2/... epoch for test)
+use_lr_scheduler = true

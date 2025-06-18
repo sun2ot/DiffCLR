@@ -1,0 +1,15 @@
+__pycache__/
+.vscode/
+Datasets/
+logs/
+datasets/
+mydatasets/
+figures/
+tmp/
+temp/
+persist/
+notebooks/
+
+docs.md
+draw.ipynb
+diff2.ipynb
