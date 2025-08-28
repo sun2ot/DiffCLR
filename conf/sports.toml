@@ -27,7 +27,7 @@ noise_min = 0.0001
 noise_max = 0.02
 steps = 5
 
-sim_weight = 0.1
+align_weight = 0.1
 residual_weight = 0.5
 modal_adj_weight = 0.2
 sampling_step = 0 # Initial sampling steps for the inverse diffusion process

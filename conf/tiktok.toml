@@ -11,7 +11,7 @@ enable_save = false
 
 [data]
 name = "tiktok" # Dataset name
-dir = "/home/yzh/DiffCLR/datasets"  # Absolute path
+dir = "/home/yzh_23/DiffCLR/datasets"  # Absolute path
 
 
 [hyper]
@@ -27,7 +27,7 @@ noise_min = 0.0001
 noise_max = 0.02
 steps = 5
 
-sim_weight = 0.01
+align_weight = 0.01
 residual_weight = 0.5
 modal_adj_weight = 0.2
 sampling_step = 0 # Initial sampling steps for the inverse diffusion process
