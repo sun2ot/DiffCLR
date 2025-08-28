@@ -11,7 +11,7 @@ enable_save = false
 
 [data]
 name = "sports" # Dataset name
-dir = "/home/yzh/DiffCLR/datasets"  # Absolute path
+dir = "datasets"
 
 
 [hyper]

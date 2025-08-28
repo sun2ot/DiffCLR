@@ -5,14 +5,17 @@ platforms = ["linux-64"]
 version = "0.1.0"
 
 [tasks]
+tiktok = "python main.py -c conf/tiktok.toml"
+yelp = "python main.py -c conf/yelp.toml"
+sports = "python main.py -c conf/sports.toml"
 
 [system-requirements]
 cuda = "11"
 libc = { family = "glibc", version = "2.27" }
 
 [environments]
-# default = {features = ["default"], solve-group = "prod"}
-dev = {features = ["default", "dev"]}
+default = {features = ["default"], solve-group = "prod"}
+dev = {features = ["default", "dev"], solve-group = "prod"}
 
 [dependencies]
 python = "==3.10.16"

@@ -11,7 +11,7 @@ enable_save = false
 
 [data]
 name = "tiktok" # Dataset name
-dir = "/home/yzh_23/DiffCLR/datasets"  # Absolute path
+dir = "datasets"
 
 
 [hyper]
