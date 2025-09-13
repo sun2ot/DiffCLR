@@ -32,3 +32,7 @@ scipy = "==1.9.1"
 [feature.dev.pypi-dependencies]
 matplotlib = "==3.8"
 ipykernel = "*"
+
+[feature.dev.dependencies]
+pandas = ">=2.0.3,<3"
+nvitop = ">=1.5.3,<2"

@@ -5,20 +5,49 @@ from scipy.sparse import coo_matrix, csr_matrix
 import torch
 
 
-def build_knn_adj(user_pos_items, item_feats, topk_per_user):
-    """Ablation3: KNN to generate modality user-item adjacency matrix"""
-    user_proto = np.array([
-        item_feats[items].mean(axis=0) if len(items) > 0 else np.zeros(item_feats.shape[1])
-        for items in user_pos_items
-    ])  # shape=(user_num, feat_dim)
+# def build_knn_adj(user_pos_items, item_feats, topk_per_user):
+#     """Ablation3: KNN to generate modality user-item adjacency matrix"""
+#     user_proto = np.array([
+#         item_feats[items].mean(axis=0) if len(items) > 0 else np.zeros(item_feats.shape[1])
+#         for items in user_pos_items
+#     ])  # shape=(user_num, feat_dim)
 
-    sim = cosine_similarity(user_proto, item_feats)  # (user_num, item_num)
+#     sim = cosine_similarity(user_proto, item_feats)  # (user_num, item_num)
 
-    u_list, i_list, vals = [], [], []
-    for u in range(sim.shape[0]):
-        idx = np.argsort(-sim[u])[:topk_per_user]
+#     u_list, i_list, vals = [], [], []
+#     for u in range(sim.shape[0]):
+#         idx = np.argsort(-sim[u])[:topk_per_user]
+#         u_list.extend([u] * topk_per_user)
+#         i_list.extend(idx.tolist())
+#         vals.extend([1.0] * topk_per_user)
+#     return np.array(u_list), np.array(i_list), np.array(vals)
+
+def build_knn_adj(user_pos_items, item_feats, topk_per_user, device='cuda'):
+    feat_dim = item_feats.shape[1]
+    user_proto_list = []
+    for items in user_pos_items:
+        if len(items) > 0:
+            proto = item_feats[items].mean(axis=0)
+        else:
+            proto = np.zeros(feat_dim)
+        user_proto_list.append(proto)
+    user_proto = np.array(user_proto_list)
+
+    user_proto_tensor = torch.tensor(user_proto, dtype=torch.float32, device=device)
+    item_feats_tensor = torch.tensor(item_feats, dtype=torch.float32, device=device)
+
+    user_proto_norm = user_proto_tensor / (user_proto_tensor.norm(dim=1, keepdim=True) + 1e-8)
+    item_feats_norm = item_feats_tensor / (item_feats_tensor.norm(dim=1, keepdim=True) + 1e-8)
+    sim = torch.matmul(user_proto_norm, item_feats_norm.t())  # (user_num, item_num)
+
+    topk_sim, topk_idx = torch.topk(sim, k=topk_per_user, dim=1)
+    u_list = []
+    i_list = []
+    vals = []
+    user_num = sim.shape[0]
+    for u in range(user_num):
+        i_list.extend(topk_idx[u].cpu().numpy().tolist())
         u_list.extend([u] * topk_per_user)
-        i_list.extend(idx.tolist())
         vals.extend([1.0] * topk_per_user)
     return np.array(u_list), np.array(i_list), np.array(vals)
 
